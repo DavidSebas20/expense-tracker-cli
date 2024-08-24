@@ -4,5 +4,11 @@
     "descripcion": "Juegos",
     "creacion": "2024-08-17",
     "monto": 20.5
+  },
+  {
+    "id": 2,
+    "descripcion": "Viveres",
+    "creacion": "2024-08-23",
+    "monto": 25.5
   }
 ]
