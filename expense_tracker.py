@@ -3,9 +3,9 @@ from datetime import datetime
 import json
 import os
 
-
 ARCHIVO_GASTOS = 'expenses.json'
 
+#FUNCIONES
 #Funcion para cargar el archivo json
 def cargar_archivo():
     if not os.path.exists(ARCHIVO_GASTOS):
@@ -48,10 +48,21 @@ def sumar_gastos():
     suma = 0
     for gasto in gastos:
         suma += float(gasto['monto'])
-
     print("Total de gastos: $",suma)
 
+#Funcion para borrar un gasto de la lista
+def borrar_gasto(id):
+    gastos = cargar_archivo()
+    tam_original = len(gastos)
+    gastos = [gasto for gasto in gastos if gasto['id'] != id] 
+    if len(gastos) < tam_original:
+        gruardar_gastos(gastos)
+        print(f"Gasto {id} eliminado correctamente.")
+    else:
+        print(f"Gasto con ID {id} no encontrado.")
 
+
+#Programa Principal
 parser = argparse.ArgumentParser(description="Seguimiento de Gastos CLI")
     
 subparsers = parser.add_subparsers(dest="command")
@@ -68,6 +79,10 @@ add_parser = subparsers.add_parser("list", help="Mostrar todos los gastos de la 
 # Comando para sumar los gastos
 add_parser = subparsers.add_parser("summary", help="Suma todos los gastos de la lista")
 
+# Comando para borrar un gasto
+add_parser = subparsers.add_parser("delete", help="Borra un gasto por id")
+add_parser.add_argument("--id", type=int, required=True, help="Id del gasto a borrar")
+
 args = parser.parse_args()
 
 if args.command == "add":
@@ -76,5 +91,7 @@ elif args.command == "list":
     mostrar_gastos()
 elif args.command == "summary":
     sumar_gastos()
+elif args.command == "delete":
+    borrar_gasto(args.id)
 else:
     parser.print_help()
