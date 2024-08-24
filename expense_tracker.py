@@ -42,6 +42,14 @@ def mostrar_gastos():
     for gasto in gastos:
         print(gasto['id'],"\t",gasto['creacion'],"\t",gasto['descripcion'],"\t$",gasto['monto'])
 
+#Funcion para sumar los gastos de la lista 
+def sumar_gastos():
+    gastos = cargar_archivo()
+    suma = 0
+    for gasto in gastos:
+        suma += float(gasto['monto'])
+
+    print("Total de gastos: $",suma)
 
 
 parser = argparse.ArgumentParser(description="Seguimiento de Gastos CLI")
@@ -54,8 +62,11 @@ add_parser.add_argument("--descripcion", required=True, help="Descripcion del ga
 add_parser.add_argument("--monto", type=float, required=True, help="Monto del gasto")
 
 
-# Comando para agregar un gasto
+# Comando para listar los gastos
 add_parser = subparsers.add_parser("list", help="Mostrar todos los gastos de la lista")
+
+# Comando para sumar los gastos
+add_parser = subparsers.add_parser("summary", help="Suma todos los gastos de la lista")
 
 args = parser.parse_args()
 
@@ -63,5 +74,7 @@ if args.command == "add":
     add_gasto(args.descripcion, args.monto)
 elif args.command == "list":
     mostrar_gastos()
+elif args.command == "summary":
+    sumar_gastos()
 else:
     parser.print_help()
